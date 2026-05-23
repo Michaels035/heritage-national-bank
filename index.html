@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heritage National Bank</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-slate-950 text-white min-h-screen font-sans" x-data="{ isAuthenticated: false, step: 1, username: '', password: '', otp: '', error: '', routingInput: '', zelleInput: '', transferAmount: '', validationLog: null }">
+
+  <template x-if="!isAuthenticated">
+    <div class="min-h-screen flex">
+      <div class="hidden lg:flex w-1/2 bg-gradient-to-br from-slate-900 to-blue-950 p-12 flex-col justify-between border-r border-slate-800">
+        <div>
+          <div class="text-2xl font-bold tracking-wider text-blue-500">🏦 HERITAGE NATIONAL</div>
+          <p class="text-slate-400 text-sm mt-1">Online Banking Portal</p>
+        </div>
+        <div class="text-xs text-slate-500 font-mono">SECURE LINK // IP: (!@#$%)</div>
+      </div>
+      <div class="w-full lg:w-1/2 flex items-center justify-center p-6">
+        <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
+          <h2 class="text-2xl font-bold mb-4" x-text="step === 1 ? 'Secure Access Node' : 'MFA Token Required'"></h2>
+          <div x-show="error" class="p-3 mb-4 bg-red-950/40 border border-red-900 text-red-400 rounded-lg text-xs font-mono" x-text="error"></div>
+          
+          <form x-show="step === 1" @submit.prevent="if(username === 'admin' && password === 'heritage2026') { error=''; step=2; } else { error='Invalid credentials. (Use: admin / heritage2026)'; }">
+            <div class="mb-4">
+              <label class="block text-xs uppercase font-bold text-slate-400 mb-1">User Identifier</label>
+              <input type="text" x-model="username" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-white focus:outline-none" placeholder="admin" required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-xs uppercase font-bold text-slate-400 mb-1">Passkey Secret</label>
+              <input type="password" x-model="password" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-white focus:outline-none" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 font-semibold rounded-lg text-sm">Initialize Session</button>
+          </form>
+
+          <form x-show="step === 2" @submit.prevent="if(otp === '123456') { isAuthenticated=true; } else { error='Invalid Token. (Use: 123456)'; }">
+            <p class="text-xs text-slate-400 mb-4">Enter verification sequence token to pass.</p>
+            <div class="mb-4">
+              <input type="text" x-model="otp" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-center text-xl tracking-widest text-white font-mono" placeholder="000000" maxlength="6" required>
+            </div>
+            <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 font-semibold rounded-lg text-sm">Verify & Unlock Dashboard</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template x-if="isAuthenticated">
+    <div class="min-h-screen flex flex-col">
+      <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex justify-between items-center">
+        <span class="text-lg font-black tracking-wider text-blue-500">🏦 HERITAGE NATIONAL</span>
+        <button @click="isAuthenticated=false; step=1; username=''; password=''; otp=''" class="px-3 py-1 bg-slate-800 hover:bg-red-900 rounded text-xs font-bold uppercase">Log Out</button>
+      </header>
+
+      <main class="flex-1 max-w-7xl w-full mx-auto p-4 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+            <span class="text-xs text-slate-400 uppercase font-bold">Premier Checking Account</span>
+            <div class="text-2xl font-mono font-bold mt-1">$41,850.20</div>
+            <div class="text-[10px] text-slate-500 font-mono mt-1">Acc: ••••4821 | IP: (!@#$%)</div>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+            <span class="text-xs text-slate-400 uppercase font-bold">High-Yield Reserve Savings</span>
+            <div class="text-2xl font-mono font-bold mt-1">$185,400.00</div>
+            <div class="text-[10px] text-emerald-400 font-mono mt-1">Active 4.34% APY Compounding</div>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+            <span class="text-xs text-blue-400 uppercase font-bold">Combined Net Worth</span>
+            <div class="text-2xl font-mono font-bold mt-1">$227,250.20</div>
+            <div class="text-[10px] text-emerald-400 font-bold mt-1">[✓ FDIC Member Stamp]</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+            <h2 class="text-base font-bold mb-1">Interbank Financial Clearance Terminal</h2>
+            <p class="text-xs text-slate-400 mb-4">Real-time anti-fraud interceptor check.</p>
+
+            <div x-show="validationLog" :class="validationLog && validationLog.success ? 'bg-emerald-950/40 border-emerald-800 text-emerald-400' : 'bg-red-950/40 border-red-900 text-red-400'" class="p-3 mb-4 rounded-lg text-xs font-mono border" x-text="validationLog ? validationLog.msg : ''"></div>
+
+            <form @submit.prevent="
+              validationLog = null;
+              if (routingInput) {
+                let r = routingInput.replace(/\D/g, '');
+                if (r.length !== 9) { validationLog = { success: false, msg: '[REJECTED]: Routing must be 9 digits.' }; return; }
+                let validRoutings = ['021000021', '026009593', '021000089', '121000248', '071923845'];
+                if (!validRoutings.includes(r)) { validationLog = { success: false, msg: '[REJECTED]: Routing number not found in Federal Reserve Database.' }; return; }
+              }
+              if (zelleInput && (zelleInput.includes('mailinator.com') || zelleInput.includes('yopmail.com') || zelleInput.includes('tempmail.org'))) {
+                validationLog = { success: false, msg: '[REJECTED]: High-risk disposable Zelle target blocked.' }; return;
+              }
+              validationLog = { success: true, msg: '[MONEY DEPLOYED CLEAN]: Cleared via Federal Reserve. Settlement completed.' };
+            " class="space-y-4">
+              <div>
+                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Transfer Gross Volume ($)</label>
+                <input type="number" x-model="transferAmount" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-white focus:outline-none" placeholder="0.00" required>
+              </div>
+              <div>
+                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">9-Digit Interbank ABA Routing Number</label>
+                <input type="text" x-model="routingInput" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-white focus:outline-none" placeholder="e.g. 021000021">
+              </div>
+              <div>
+                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Zelle® Destination Target Email or Phone</label>
+                <input type="text" x-model="zelleInput" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-white focus:outline-none" placeholder="phone/email target">
+              </div>
+              <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded font-bold text-xs uppercase tracking-wider">Execute Interbank Settlement</button>
+            </form>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-sm mb-2 text-blue-400">Sandbox Test Parameters</h3>
+              <p class="text-xs text-slate-300 leading-relaxed mb-4">Use these parameters inside your terminal window to verify the compliance engine handles invalid vectors properly:</p>
+              <ul class="list-disc pl-4 text-xs space-y-2 text-slate-400 font-mono">
+                <li><b class="text-emerald-400">Valid Federal Routing:</b> 021000021</li>
+                <li><b class="text-emerald-400">Valid Federal Routing:</b> 026009593</li>
+                <li><b class="text-red-400">Banned Phishing Email:</b> test@mailinator.com</li>
+              </ul>
+            </div>
+            <div class="text-[10px] text-slate-500 font-mono border-t border-slate-800 pt-4 mt-4">
+              Federal Regulation E Electronic Shield Active. System Core Sync Secure.
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="bg-slate-950 border-t border-slate-900 px-4 py-4 text-center text-[10px] text-slate-500 max-w-7xl w-full mx-auto">
+        © 2026 Heritage National Bank Corporation. Banking instruments and liquidity channels are dispatched directly via Heritage National Bank, N.A. Member FDIC (Certificate #071923845). Equal Housing Lender.
+      </footer>
+    </div>
+  </template>
+
+</body>
+</html>
